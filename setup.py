@@ -28,6 +28,8 @@ import subprocess
 
 from builtins import OSError
 
+from cobbler.utils import get_http_user
+
 VERSION = "3.0.1"
 OUTPUT_DIR = "config"
 
@@ -480,12 +482,12 @@ if __name__ == "__main__":
     logpath = "/var/log/"
     statepath = "/tmp/cobbler_settings/devinstall"
     httpd_service = "httpd.service"
+    http_user = get_http_user()
     suse_release = "suse" in distro.like()
 
     if suse_release:
         webconfig = "/etc/apache2/vhosts.d"
         webroot = "/srv/www/"
-        http_user = "wwwrun"
         httpd_service = "apache2.service"
         defaultpath = "/etc/sysconfig/"
     elif os.path.exists("/etc/debian_version"):
@@ -494,12 +496,10 @@ if __name__ == "__main__":
         else:
             webconfig = "/etc/apache2/conf.d"
         webroot = "/srv/www/"
-        http_user = "www-data"
         defaultpath = "/etc/default/"
     else:
         webconfig = "/etc/httpd/conf.d"
         webroot = "/var/www/"
-        http_user = "apache"
         defaultpath = "/etc/sysconfig/"
 
     webcontent = webroot + "cobbler_webui_content/"

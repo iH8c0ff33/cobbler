@@ -690,13 +690,8 @@ class RepoSync(object):
         a safeguard.
         """
         # all_path = os.path.join(repo_path, "*")
-        owner = "root:apache"
 
-        (dist, _) = os_release()
-        if dist == "suse":
-            owner = "root:www"
-        elif dist in ("debian", "ubuntu"):
-            owner = "root:www-data"
+        owner = "root:" + utils.get_http_user()
 
         cmd1 = "chown -R " + owner + " %s" % repo_path
 

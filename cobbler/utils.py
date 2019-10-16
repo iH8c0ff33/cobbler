@@ -890,9 +890,26 @@ def get_family():
             return "redhat"
     if "debian" in distro_name or "ubuntu" in distro_name:
         return "debian"
+    if "alpine" in distro_name:
+        return "alpine"
     if "suse" in distro.like():
         return "suse"
     return distro_name
+
+
+def get_http_user():
+    """
+    Get httpd user used by operating system
+    """
+
+    http_user = "apache"
+    family = get_family()
+    if family == "debian" or family == "alpine":
+        http_user = "www-data"
+    elif family == "suse":
+        http_user = "wwwrun"
+
+    return http_user
 
 
 def os_release():
