@@ -1,15 +1,8 @@
-# WARNING! This is not in any way production ready. It is just for testing!
+FROM httpd:alpine
 
-FROM opensuse/leap:15
-
-ENV container docker
-
-WORKDIR /test_dir
-COPY . /test_dir
-
-VOLUME [ "/sys/fs/cgroup" ]
-
-RUN ["/bin/bash", "-c", "tests/setup-test-docker.sh"]
-
-# Set this as an entrypoint
-CMD ["/usr/lib/systemd/systemd", "--system"]
+RUN apk add git make python3 gcc musl-dev python3-dev
+COPY . /opt/cobbler
+WORKDIR /opt/cobbler
+RUN pip3 install -r requirements.txt
+RUN make
+RUN make install
